@@ -1,0 +1,90 @@
+
+
+bash primer
+
+Standard input/output/error
+
+Keyboard shortcuts
+^C (break), ^D (end of file), Up arrow/^P & Down arrow/^N (command recall)
+
+Wildcard expansions and shortcuts
+. and ..
+*.txt (all files ending in .txt)
+data0?.dat (any files starting with data0 followed by a single character and .dat)
+data0[12345].dat (data01.dat through data05.dat)
+data0[1-5].dat (same as above)
+~ (your home directory), ~user (user's home directory)
+
+Redirects
+>, 2>, &>
+>>, &>>
+>&2, 2>&1
+
+Pipes
+|, 2|, -
+
+Command terminators/seperators
+;, &, &&, ||, ()
+
+Here documents, strings
+COMMAND << FILE (vs: cat FILE | COMMAND)
+COMMAND <<< $VAR (vs: echo $VAR | COMMAND)
+COMMAND << EOF
+
+
+VAR="string"
+VAR=123
+VAR=$(ls)
+VAR=`seq 1 10`
+VAR=$((2+2))
+VAR={1..10}
+VAR=(string 123)
+VAR[0]=string
+VAR[1]=123
+echo $VAR
+echo ${VAR[1]}
+echo $((VAR[1]))
+
+for VAR in LIST; do COMMAND; done
+for ((VAR=1; VAR < 5; VAR++)); do COMMAND; done
+
+while EXPR; do COMMAND; done
+
+if EXPR; then COMMAND; else COMMAND; fi
+man test
+
+if [ $VAR = 1 ]; then
+if [ $VAR == "one" ]; then
+if [[ $VAR == *one* ]]; then
+if [[ $VAR =~ "(one|1)" ]]; then
+
+
+EXAMPLES
+----------------------------
+
+for x in {1..10}; do touch data_$x.dat; done
+
+for x in *.dat; do NUM=$(cut -d'_' -f2 <<< $x); echo $NUM; done
+
+for x in *.dat; do NUM=$(cut -d'_' -f2 <<< $x); mv $x old_$NUM.dat; done
+
+for x in *.dat; do mv $x $(sed -e 's/data/old/' <<< $x); done
+
+dmesg | while read LINE; do sed -e 's/pages/potatos/' <<< $LINE; done
+
+# print the 3rd, 7th, and 8th columns from a data table
+cat table.dat | awk '{print $3, $7, $8}'
+
+# average all the numbers in the 1st column
+# first set of brackets are commands executed for every line
+# second set of brackets (after END) are only executed at the end
+cat table.dat | awk '{n=n+1; sum=sum+$1} END {print sum/n}'
+
+backup.sh
+runsim.sh
+spawn.sh
+extract.sh
+tile.sh
+crop.sh
+include.sh
+process.sh
